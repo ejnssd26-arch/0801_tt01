@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎓 교실 발표자 추첨 & 발표 타이머</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- 헤더 -->
+    <header class="app-header">
+      <div class="logo-title">
+        <span class="badge-icon">🎓</span>
+        <h1>교실 발표자 추첨 & 타이머</h1>
+      </div>
+      <div class="header-status">
+        <span class="status-chip">
+          <span class="dot"></span> 수업 도우미 모드
+        </span>
+      </div>
+    </header>
+
+    <!-- 메인 컨텐츠 영역 (그리드 레이아웃) -->
+    <main class="main-grid">
+      
+      <!-- 좌측/상단: 발표자 추첨 메인 섹션 -->
+      <section class="picker-card glass-panel">
+        <div class="card-header">
+          <h2>🎲 발표자 추첨</h2>
+          <label class="toggle-option">
+            <input type="checkbox" id="excludeDrawnCheck" checked>
+            <span class="checkbox-custom"></span>
+            <span class="toggle-label">이미 뽑힌 사람 제외</span>
+          </label>
+        </div>
+
+        <div class="display-area">
+          <div class="rolling-box" id="rollingBox">
+            <span class="placeholder-text">'추첨하기' 버튼을 눌러주세요!</span>
+          </div>
+        </div>
+
+        <div class="picker-actions">
+          <button id="drawBtn" class="btn btn-primary btn-xl">
+            <span class="btn-icon">🎯</span> 추첨하기
+          </button>
+          <button id="resetDrawnBtn" class="btn btn-secondary">
+            <span class="btn-icon">🔄</span> 제외 목록 리셋
+          </button>
+        </div>
+
+        <!-- 제외된 사람 목록 태그 -->
+        <div class="drawn-list-container">
+          <span class="drawn-label">이미 뽑힌 인원 (<span id="drawnCount">0</span>명):</span>
+          <div class="drawn-tags" id="drawnTags">
+            <span class="empty-tag">없음</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 우측/상단: 발표 타이머 섹션 -->
+      <section class="timer-card glass-panel">
+        <div class="card-header">
+          <h2>⏱️ 발표 타이머</h2>
+          <span class="timer-state-badge" id="timerStateBadge">준비</span>
+        </div>
+
+        <div class="timer-display-area">
+          <div class="time-readout" id="timerDisplay">03:00</div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="timerProgress"></div>
+          </div>
+        </div>
+
+        <!-- 시간 프리셋 버튼 -->
+        <div class="timer-presets">
+          <button class="btn btn-preset" data-time="60">1분</button>
+          <button class="btn btn-preset active" data-time="180">3분</button>
+          <button class="btn btn-preset" data-time="300">5분</button>
+        </div>
+
+        <!-- 타이머 조작 버튼 -->
+        <div class="timer-actions">
+          <button id="startTimerBtn" class="btn btn-success">
+            <span class="btn-icon">▶</span> 시작
+          </button>
+          <button id="pauseTimerBtn" class="btn btn-warning" disabled>
+            <span class="btn-icon">⏸</span> 일시정지
+          </button>
+          <button id="resetTimerBtn" class="btn btn-danger">
+            <span class="btn-icon">⏹</span> 리셋
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 하단: 명단 입력란 섹션 -->
+    <section class="roster-card glass-panel">
+      <div class="card-header">
+        <div class="roster-title">
+          <h2>📋 학생 명단 입력</h2>
+          <span class="roster-counter">총 <strong id="totalCount">0</strong>명 (추첨 가능: <strong id="availableCount" class="highlight-num">0</strong>명)</span>
+        </div>
+        <div class="preset-roster-btns">
+          <button id="presetNumbersBtn" class="btn btn-sm btn-outline">1~25번 입력</button>
+          <button id="presetSampleBtn" class="btn btn-sm btn-outline">샘플 명단 입력</button>
+          <button id="clearRosterBtn" class="btn btn-sm btn-ghost">지우기</button>
+        </div>
+      </div>
+      
+      <div class="input-wrapper">
+        <textarea id="rosterInput" placeholder="학생 이름이나 번호를 쉼표(,)로 구분하여 입력하세요. (예: 김철수, 이영희, 박서준, 최유진...)"></textarea>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 대형 결과 팝업 모달 -->
+  <div class="modal-overlay" id="resultModal">
+    <div class="modal-content glass-panel">
+      <div class="modal-badge">🎉 오늘의 발표자 🎉</div>
+      <div class="winner-name" id="winnerNameDisplay">홍길동</div>
+      <p class="modal-subtext">멋진 발표를 응원합니다!</p>
+      <button class="btn btn-primary btn-lg" id="closeModalBtn">확인 (닫기)</button>
+    </div>
+  </div>
+
+  <!-- 폭죽 애니메이션을 위한 캔버스 -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
